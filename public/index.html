@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Hammerhead Proxy Iframe</title>
+    <title>Hammerhead Proxy</title>
     <style>
       html,
       body,
@@ -26,7 +26,10 @@
     <script src="./uv/uv.config.js"></script>
 
     <script>
-      const targetSite = "https://hammerhead-games.vercel.app";
+      const params = new URLSearchParams(window.location.search);
+      const targetSite = new URL(
+        params.get("url") || "https://hammerhead-games.vercel.app"
+      );
 
       // Encode the site URL if using UV config
       const encodedUrl =
