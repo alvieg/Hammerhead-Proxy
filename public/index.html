@@ -1,26 +1,48 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <script src="/uv/uv.bundle.js"></script>
-        <script src="/uv/uv.config.js"></script>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hammerhead Proxy Iframe</title>
+    <style>
+      html,
+      body,
+      iframe {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+        overflow: hidden;
+      }
+      iframe {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <iframe id="proxyFrame"></iframe>
 
-        <script>
-        if ("serviceWorker" in navigator) {
-            window.addEventListener("load", () => {
-                navigator.serviceWorker.register("/uv/sw.js", {
-                    scope: __uv$config.prefix,
-                });
-            });
-        }
-        </script>
+    <script src="./uv/uv.client.js"></script>
+    <script src="./uv/uv.config.js"></script>
 
-        <link rel="stylesheet" href="example.css">
-    </head>
-    <body>
-        <input type="text" id="urlInput" placeholder="Enter URL here">
-        <button id="searchButton">Search Text</button>
+    <script>
+      const targetSite = "https://hammerhead-games.vercel.app";
 
-        <iframe id="iframeWindow" class="iframeWindow"></iframe>
-    </body>
-    <script src="example.js"></script>
+      // Encode the site URL if using UV config
+      const encodedUrl =
+        typeof __uv$config !== "undefined"
+          ? __uv$config.encodeUrl(targetSite)
+          : targetSite;
+
+      // Optionally prepend prefix if UV is handling routing
+      const proxiedUrl =
+        typeof __uv$config !== "undefined"
+          ? __uv$config.prefix + encodedUrl
+          : encodedUrl;
+
+      // Load the site into the iframe
+      const iframe = document.getElementById("proxyFrame");
+      iframe.src = proxiedUrl;
+    </script>
+  </body>
 </html>
